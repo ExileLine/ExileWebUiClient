@@ -138,6 +138,35 @@ class BaseWebUi:
         print(message)
         ...
 
+    def get_iframe(self, iframe_selector: str):
+        """
+        获取`iframe`实例, 对`iframe`内元素进行操作, 例如: iframe.query_selector(selector).click()
+        :param iframe_selector:
+        :return:
+        """
+
+        # 等待 iframe 加载完成
+        iframe = self.page.wait_for_selector(iframe_selector).content_frame()
+        iframe.wait_for_load_state()
+        self.out_logs(f"iframe实例: {iframe}")
+        return iframe
+
+    @staticmethod
+    def get_iframe_element(iframe_example, selector: str):
+        """
+        获取`iframe`内的元素, 结合 `self.get_iframe()` 使用
+        :param iframe_example: `self.get_iframe()` 返回
+        :param selector:
+        :return:
+
+        iframe_element.fill()
+        iframe_element.click()
+        ...
+        """
+
+        iframe_element = iframe_example.query_selector(selector)
+        return iframe_element
+
     def start(self):
         """start"""
 
